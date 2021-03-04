@@ -1,11 +1,36 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const ejs = require("ejs");
+//const ejs = require("ejs");
+const {Pool,Client} = require('pg');
+//const postgres = require("postgres");
 var app = express();
 
-app.set('view engine','ejs');
+const pool = new Pool({
+    host: 'localhost',
+    user: 'postgres',
+    password: 'root',
+    database: 'mijigym'
+  })
+//const sql = postgres('postgres://postgres:root@localhost:5432/mijigym');
+
+//app.set('view engine','ejs');
+
+const query_trainee_level = 'select * from trainee_level;';
+const query_trainee_objective = 'select * from trainee_objective;';
+const query_training_frequency = 'select * from training_frequency;';
+
+pool.query(query_trainee_level,(err,res)=>{
+    if (err) {
+        console.log(err.stack)
+      } else {
+        console.log(res.rows)
+       }
+});
+
 
 app.get("/",(req,res)=>{
+    
+    console.log(nuevo);
     res.render("list",{kindOfDay:'APP'});
 });
 
