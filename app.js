@@ -1,8 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-//const ejs = require("ejs");
 const {Pool,Client} = require('pg');
-//const postgres = require("postgres");
 var app = express();
 
 const pool = new Pool({
@@ -11,9 +9,7 @@ const pool = new Pool({
     password: 'root',
     database: 'mijigym'
   })
-//const sql = postgres('postgres://postgres:root@localhost:5432/mijigym');
 
-//app.set('view engine','ejs');
 
 const query_trainee_level = 'select * from trainee_level;';
 const query_trainee_objective = 'select * from trainee_objective;';
@@ -33,6 +29,11 @@ app.get("/",(req,res)=>{
     console.log(nuevo);
     res.render("list",{kindOfDay:'APP'});
 });
+
+app.get("/entrenamiento",(req,res)=>{
+  res.render()
+});
+
 
 app.listen(3000, (req,res)=>{
     console.log("Listening on 3000");
