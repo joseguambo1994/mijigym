@@ -3,7 +3,14 @@ const bodyParser = require("body-parser");
 const {Pool,Client} = require('pg');
 const ejs = require("ejs");
 const { query } = require("express");
+const cors = require("cors");
 var app = express();
+
+const trainee_level = [
+  {id:1,trainee_level_type:"novate"},
+  {id:2,trainee_level_type:"intermedio"},
+  {id:3,trainee_level_type:"avanzadisimo"}
+];
 
 const pool = new Pool({
     host: 'localhost',
@@ -38,6 +45,7 @@ pool.query(query_trainee_objective,(err,res)=>{
        }
 });
 
+app.use(cors());
 
 app.get("/",(req,res,next)=>{
     
@@ -45,6 +53,7 @@ app.get("/",(req,res,next)=>{
     //res.render('index',{foo:'FOO'})
    // res.render("list",{kindOfDay:'APP'});
    //res.render('listOfQueries', { title: 'Express' , items : ["red", "blue", "green"]});
+   res.json(trainee_level);
    res.render('listOfQueries', { title: 'Express' , items : query_result});
 
   });
@@ -53,6 +62,16 @@ app.get("/entrenamiento",(req,res)=>{
   res.json(query_result);
 });
 
-app.listen(3000, (req,res)=>{
-    console.log("Listening on 3000");
+app.get("/test",(req,res)=>{
+  res.json(trainee_level);
+})
+
+app.get("/hey",(req,res)=>{
+console.log(" que hubo consola");  
+res.send("que hubo")
+}
+  );
+
+app.listen(4000, (req,res)=>{
+    console.log("Listening on 4000");
 })
