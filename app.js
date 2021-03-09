@@ -1,5 +1,5 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+var express = require("express");
+var bodyParser = require("body-parser");
 const {Pool,Client} = require('pg');
 const ejs = require("ejs");
 const { query } = require("express");
@@ -7,7 +7,7 @@ const cors = require("cors");
 var app = express();
 
 const trainee_level = [
-  {id:1,trainee_level_type:"novate"},
+  {id:1,trainee_level_type:"novato"},
   {id:2,trainee_level_type:"intermedio"},
   {id:3,trainee_level_type:"avanzadisimo"}
 ];
@@ -24,11 +24,11 @@ app.set('view engine','ejs');
 var query_result = {};
 var query_result_other= [];
 
-const query_trainee_level = 'select * from trainee_level;';
+var query_trainee_level = 'select * from trainee_level;';
 const query_trainee_objective = 'select * from trainee_objective;';
 const query_training_frequency = 'select * from training_frequency;';
 
-pool.query(query_trainee_objective,(err,res)=>{
+pool.query(query_trainee_level,(err,res)=>{
     if (err) {
         console.log(err.stack)
       } else {
@@ -38,7 +38,7 @@ pool.query(query_trainee_objective,(err,res)=>{
         query_result = res.rows;
         var i=0;
         while( i<query_result.length){
-          query_result_other.push(query_result[i]["trainee_objective_type"]) ;
+          query_result_other.push(query_result[i]["trainee_objective_level"]) ;
           i++
         }
         console.log(query_result);
@@ -63,7 +63,9 @@ app.get("/entrenamiento",(req,res)=>{
 });
 
 app.get("/test",(req,res)=>{
-  res.json(trainee_level);
+  //res.json(trainee_level);
+  console.log(query_result);
+  res.json(query_result);
 })
 
 app.get("/hey",(req,res)=>{
@@ -71,6 +73,10 @@ console.log(" que hubo consola");
 res.send("que hubo")
 }
   );
+
+app.post("/api/user",(req,res)=>{
+
+})
 
 app.listen(4000, (req,res)=>{
     console.log("Listening on 4000");
