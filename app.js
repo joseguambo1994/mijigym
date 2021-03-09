@@ -31,50 +31,40 @@ const query_training_frequency = 'select * from training_frequency;';
 pool.query(query_trainee_level,(err,res)=>{
     if (err) {
         console.log(err.stack)
-      } else {
-      //  query_result_other = res.rows[1];
-       // query_result = query_result_other["trainee_objective_type"];
-       
+      } else{
         query_result = res.rows;
-        var i=0;
-        while( i<query_result.length){
-          query_result_other.push(query_result[i]["trainee_objective_level"]) ;
-          i++
-        }
         console.log(query_result);
-       }
+      }
 });
 
+
+
 app.use(cors());
+app.use(express.json());
 
 app.get("/",(req,res,next)=>{
-    
-    console.log("what");
-    //res.render('index',{foo:'FOO'})
-   // res.render("list",{kindOfDay:'APP'});
-   //res.render('listOfQueries', { title: 'Express' , items : ["red", "blue", "green"]});
-   res.json(trainee_level);
-   res.render('listOfQueries', { title: 'Express' , items : query_result});
-
+    console.log("Entraste")
   });
 
 app.get("/entrenamiento",(req,res)=>{
   res.json(query_result);
 });
 
-app.get("/test",(req,res)=>{
-  //res.json(trainee_level);
+app.get("/entrenamiento/nivel",(req,res)=>{
   console.log(query_result);
   res.json(query_result);
 })
 
-app.get("/hey",(req,res)=>{
-console.log(" que hubo consola");  
-res.send("que hubo")
-}
-  );
+app.post("/user",(req,res)=>{
+  res.json(req.body)
+  console.log(req.body)
+  var firstName=req.body.firstName
+  var lastName=req.body.lastName
+  var email=req.body.email
+  var query_insert_user = "INSERT INTO trainee (trainee_name, trainee_email) VALUES ("+"'"+firstName+" "+ lastName+"'"+","+"'"+email+"'"+ ");";
+  console.log(query_insert_user);
+  pool.query(query_insert_user);
 
-app.post("/api/user",(req,res)=>{
 
 })
 
