@@ -27,7 +27,7 @@ var query_result_objective = {};
 
 var query_trainee_level = 'select * from trainee_level;';
 var query_trainee_objective = 'select * from trainee_objective;';
-var query_training_frequency = 'select * from training_frequency;';
+var query_trainee_frequency = 'select * from trainee_frequency;';
 
 pool.query(query_trainee_level,(err,res)=>{
     if (err) {
@@ -44,7 +44,7 @@ pool.query(query_trainee_objective,(err,res)=>{
       query_result_objective = res.rows;
     }
 });
-pool.query(query_training_frequency,(err,res)=>{
+pool.query(query_trainee_frequency,(err,res)=>{
   if (err) {
       console.log(err.stack)
     } else{
