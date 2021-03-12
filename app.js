@@ -28,6 +28,9 @@ var query_result_objective = {};
 var query_trainee_level = 'select * from trainee_level;';
 var query_trainee_objective = 'select * from trainee_objective;';
 var query_trainee_frequency = 'select * from trainee_frequency;';
+var query_trainee_frequency_id = "select trainee_frequency_id  from trainee_frequency where trainee_frequency_type = ";
+var query_trainee_level_id = "select trainee_level_id  from trainee_level where trainee_level_type = ";
+var query_trainee_objective_id = "select trainee_objective_id  from trainee_objective where trainee_objective_type = ";
 
 pool.query(query_trainee_level,(err,res)=>{
     if (err) {
@@ -72,6 +75,9 @@ app.get("/training/frequency",(req,res)=>{
 
 app.get("/training/objective",(req,res)=>{
   res.json(query_result_objective);
+  // getFrequencyId(frequency1);
+  // getFrequencyId(frequency2);
+  // getFrequencyId(frequency3);
 })
 
 
@@ -88,6 +94,77 @@ app.post("/user",(req,res)=>{
 
 
 })
+const frequency1 ="3 dias por semana";
+const frequency2 = "4 dias por semana";
+const frequency3="5 dias por semana";
+
+var getFrequencyId = (frequency_text) =>{
+  pool.query(query_trainee_frequency_id+"'"+frequency_text+"'",(err,res)=>{
+    if (err) {
+        console.log(err.stack)
+      } else{
+        query_result_frequency_id = res.rows[0].trainee_frequency_id;
+        console.log("Id frequency from query")
+        console.log(query_result_frequency_id)
+        
+      }
+  });
+  return query_result_frequency_id;
+}
+const level = "avanzado (más de 3 años)";
+var getLevelId = (level_text) =>{
+  pool.query(query_trainee_level_id+"'"+level_text+"'",(err,res)=>{
+    if (err) {
+        console.log(err.stack)
+      } else{
+        query_result_level_id = res.rows[0].trainee_level_id;
+        console.log("Id level from query")
+        console.log(query_result_level_id)
+        
+      }
+  });
+  return query_result_level_id;
+}
+const objective = "Mantener peso";
+var getObjectiveId = (objective_text) =>{
+  pool.query(query_trainee_objective_id+"'"+objective_text+"'",(err,res)=>{
+    if (err) {
+        console.log(err.stack)
+      } else{
+        query_result_objective_id = res.rows[0].trainee_objective_id;
+        console.log("Id objective from query")
+        console.log(query_result_objective_id)
+        
+      }
+  });
+  return query_trainee_objective_id;
+}
+
+
+  app.post("/user2",(req,res)=>{
+  res.json(req.body)
+  console.log(req.body)
+  var name = req.body.trainee_name;
+  var age = req.body.trainee_age;
+  var gender = req.body.trainee_gender;
+  var email = req.body.trainee_email;
+  var frequency_id = req.body.trainee_frequency_id;
+ // var frequency_id = getFrequencyId(req.body.trainee_frequency_id.toString());
+
+  var level_id = req.body.trainee_level_id;
+  var objective_id = req.body.trainee_objective_id;
+  
+  // var level_id = getLevelId(req.body.trainee_level_id.toString());
+  // var objective_id = getObjectiveId(req.body.trainee_objective_id.toString());
+  
+  var query_insert_user = "INSERT INTO trainee (trainee_name,trainee_age,trainee_gender,\
+    trainee_email,trainee_frequency_id,trainee_level_id,trainee_objective_id )\
+	VALUES ("+"'"+name+"'"+","+age+","+"'"+gender+"'"+","+"'"+email+"'"+","+frequency_id+","+level_id+","+objective_id+");";
+  console.log(query_insert_user);
+  pool.query(query_insert_user);
+})
+ 
+
 
 app.listen(4000, (req,res)=>{
     console.log("Listening on 4000");

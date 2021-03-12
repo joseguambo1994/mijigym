@@ -24,6 +24,8 @@ INSERT INTO trainee (trainee_name, trainee_email)
 INSERT INTO trainee (trainee_name,trainee_age,trainee_gender,trainee_email,trainee_frequency_id,trainee_level_id,trainee_objective_id )
 	VALUES ('jose guambo', 26, 'hombre','jose@guambo.com',3,3,1 );
 
+-------- Query trainee_frequency_id from trainee_frequency_type
+SELECT trainee_frequency_id  FROM trainee_frequency WHERE trainee_frequency_type = '5 dias por semana'
 
 
 
