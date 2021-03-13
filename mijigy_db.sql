@@ -6,11 +6,11 @@
 BEGIN;
 
 
-CREATE TABLE public.training_frequency
+CREATE TABLE public.trainee_frequency
 (
-    "training_frequency_id" SERIAL,
-    training_frequency_type text NOT NULL,
-    PRIMARY KEY ("training_frequency_id")
+    "trainee_frequency_id" SERIAL,
+    trainee_frequency_type text NOT NULL,
+    PRIMARY KEY ("trainee_frequency_id")
 );
 
 CREATE TABLE public.trainee_level
@@ -34,15 +34,15 @@ CREATE TABLE public.trainee
     trainee_age integer ,
     trainee_gender text ,
     trainee_email text NOT NULL,
-    training_frequency_id integer ,
+    trainee_frequency_id integer ,
     trainee_level_id integer ,
     trainee_objective_id integer ,
     PRIMARY KEY (trainee_id)
 );
 
 ALTER TABLE public.trainee
-    ADD FOREIGN KEY (training_frequency_id)
-    REFERENCES public.training_frequency ("training_frequency_id")
+    ADD FOREIGN KEY (trainee_frequency_id)
+    REFERENCES public.trainee_frequency ("trainee_frequency_id")
     NOT VALID;
 
 
@@ -72,11 +72,11 @@ INSERT INTO trainee_objective (trainee_objective_type)
 	VALUES ('Subir de peso');
 INSERT INTO trainee_objective (trainee_objective_type)
 	VALUES ('Mantener peso');
-INSERT INTO training_frequency (training_frequency_type)
+INSERT INTO trainee_frequency (trainee_frequency_type)
 	VALUES ('3 dias por semana');
-INSERT INTO training_frequency (training_frequency_type)
+INSERT INTO trainee_frequency (trainee_frequency_type)
 	VALUES ('4 dias por semana');
-INSERT INTO training_frequency (training_frequency_type)
+INSERT INTO trainee_frequency (trainee_frequency_type)
 	VALUES ('5 dias por semana');
 
 INSERT INTO trainee (trainee_name, trainee_email)
@@ -85,6 +85,95 @@ INSERT INTO trainee (trainee_name, trainee_email)
 	VALUES ('Luis Cardoso', 'luis@cardoso.com');
 
 
+-----------------------Recommendations 
+CREATE TABLE public.recommendation
+(
+    recommendation_id SERIAL,
+    recommendation_type INTEGER NOT NULL,
+    recommendation_number INTEGER NOT NULL,
+    recommendation_text text NOT NULL,
+    recommendation_video text NOT NULL,
+    PRIMARY KEY (recommendation_id)
+);
+
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (1,1,
+    '3 días son más que suficientes para progresar en el gimnasio (músculo y/o fuerza), y sirven particularmente bien a las personas con tiempo limitado por sus estudios o trabajo. Procura separar al menos unas 24 o 48 horas entre sesiones de entrenamiento para que se recuperen tus músculos, por ejemplo: lunes, miércoles y viernes, otra posibilidad sería martes, viernes y domingo (la que te resulte mejor de acuerdo a tus ocupaciones). Una gran opción son las rutinas full-body (cuerpo entero), y el enfoque en ejercicios compuestos. Procura no faltar a tus sesiones y haz que cada sesión cuente.',
+    'gBH9NRfDsXM' );
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (1,2,
+    '4 dias te permite ser flexible con los entrenamientos que selecciones. Tres grandes opciones son las rutinas de empuje-hale, torso-pierna e incluso por partes del cuerpo. Para las dos primera rutinas selecciona dos dias, uno de decanso, dos dias y dos de descanso, por ejemplo lunes y martes entrenas, miércoles descansas, jueves y viernes vuelves a entrenar y fin de semana descansas nuevamente. La ventaja de estos entrenamientos por sobre la frecuencia de 3 dias, es que puedes hacer entrenos más intensos debido a que estas trabajando cada músculo unas dos veces por semana (dejando unas 36 horas más o menos de descanso). También es un poco más flexible pues perder una sesión de entrenamiento no es tan significante (comparado a frecuencias de 3 dias de entrenamiento a la semana), y puedes retomar los entrenamientos normales a la siguiente semana.',
+    'gBH9NRfDsXM');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (1,3,
+    '5 dias a la semana es la frecuencia de entrenamiento más flexible de las vistas, pues una sesión de entrenamiento perdida influye muy poco en nuestro esquema de progresión (músculo y fuerza). Selecciona  5 días de la semana, te recomiendo que empieces la semana con los entrenamientos más intensos (donde muevas más peso), por ejemplo el entrenamiento de espalda y piernas, y reduzcas la intensidad (bajes el peso) y aumentes el volumen (número de series y repeticiones) a medida que vaya terminando la semana. En la parte psicológica es uno de las mejores frecuencias de entrenamiento porque sientes que la mayoría de dias a la semana estas haciendo algo de provecho (deporte/vida sana), lo cual te puede motivar enormemente frente a las frecuencias de menor número de dias.',
+    'gBH9NRfDsXM');
+
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (2,1,
+    'Eres un novato, tu entrenamiento es muy distinto al de otras personas. La parte mala es que desconoces de principios del entrenamiento, ejercicios y desconoces como responde tu cuerpo (que ejercicios te sientan mejor y manejo de la recuperación). La parte genial, al no tener mucha experiencia tu cuerpo se transformará de manera inmediata, verás resultadas en tu físico impresionantes y las progresiones en cuanto a subir repeticiones y peso en los ejercicios será irreal (ganancias de novato), algo que no sucede en atletas avanzados (principio de retornos decrecientes). Enfócate en aprender cuales son los ejercicios compuestos (ya sea en el gimnasio o en el parque practicando calistenia), cada entrenamiento intenta subir una repetición o un kilogramo respecto a la sesión previa (no sacrifiques técnica por ego) y sobre todo enfócate en TU entrenamiento y TU progresión. En especial si entrenas con algún compañero recuerda que ambos tienen diferente genética, han practicado diferentes deportes, y el peso o ejercicio que le sirva a él tal vez no sea el óptimo para ti.',
+    'K2q1Qy1Ep3g');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (2,2,
+    'Eres un atleta intermedio. Has agotado las ganancias de novato, y empiezas a ver algunos plateau en tu entrenamiento. Debes empezar a planificar tu entrenamiento con más nivel de detalle. Por ejemplo, si quieres subir tus marcas en algún ejercicio que llevas mucho tiempo estancado, deberías plantearte una fase de volumen (surplus calórico) que te permita transformar los nutrientes en kilos en la barra. Lo mismo si vas a realizar una fase de definición, lo mas acertado es tratar de mantener tus marcas, pero no esperes bajar de peso mientras también mejoras en los ejercicios porque dispondrás de menor energía (y músculo a medida que avances la fase).Debido a que manejas pesos importantes recuerda rotar los ejercicios, para preservar la integridad de tus tendones y articulaciones, además de incorporar fases de descarga (reducción de intensidad o volumen de entrenamiento) para darle un descanso a tus músculos o a tu sistema nervioso.',
+    'lW_gm7o24i4');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (2,3,
+    'Eres un atleta avanzado. Sabes perfectamente los ejercicios que te funcionan, los grupos musculares en los que tienes mejor genética además de que has realizado grandes avances en fuerza e hipertrofia. A estas alturas del partido no vas a realizar saltos muy significativos en tu entrenamiento, por lo que te recomiendo que entrenes tus músculos rezagados (aquellos que no les dedicaste mucho tiempo anterior o simplemente no tienes buena genética). Debes incorporar de manera obligatoria rutinas de flexibilidad y estiramiento. Las fases de descargas deben ser más frecuentes que en años anteriores porque al manejar pesos grandes prodeces estrés en tu sistema nervioso central.',
+    'X3RA12hcSTk');
+
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (3,1,
+    'Tu objetivo es bajar de peso. No hay nada más importante que la alimentación. No importa si entrenas cinco horas diarias, si al final del día comes más calorías de las que quemas, más a incrementar tu peso. Te recomiendo informarte muy bien sobre que es una caloría, un macronutriente y sobre todo no pienses en los alimentos como “dieta” sino como “nutrición”. Haz cambios progresivos como cambiar bebidas azucaras por opciones libres de calorías, incrementar el consumo de ensaladas y bajar un poco el consumo de comida chatarra. Lo más importante es que esta nueva forma de alimentarte se ajuste a tus ocupaciones y horario (adherencia), es decir que si no te ves comiendo de la misma forma por unos 5 años entonces no es el protocolo adecuado. Pésate a diario (mismo lugar, hora, condiciones) para que tengas una forma objetiva de medir si progresas, y tomate unas fotos cada semana, que, aunque es una forma más subjetiva de medición es muchísimo más motivante. Recuerda dormir bien.',
+    'P8W_SqjMd9M');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (3,2,
+    'Tu objetivo es subir de peso, debes prestar especial atención a tu alimentación. Si te ha costado previamente ganar peso, recuerda que debes hacer cambios muy pequeños que a la final sumen. Por ejemplo aumenta el número de comidas que ingieres por días, empezando por cosas tan pequeñas como una porción de proteína diaria (lata de atún, presa de pollo, lo que tengas) y pruébalo por unas tres semanas. Mira como avanzas en la balanza y aumenta progresivamente lo que consumes. Si te cuesta trabajo ingerir alimentos prueba con opciones líquidas (un batido de proteínas, leche entera, cualquier opción es buena). Incorpora alguna forma de entrenamiento de resistencia (gimnasio o calistenia) para que abras tu apetito y que tu ganancia de peso no sea solo grasa, sino que adquieras tejido muscular para mejorar tu figura.',
+    'bGUf8ctblDI');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (3,3,
+    'No hay secreto para mantener tu peso. Lleva los mismos hábitos alimenticios que has tenido y veras que tu peso corporal no se mueve. Si eres nuevo respecto al entrenamiento te recomiendo que la proteína (pollo, huevos, atún, carne, cualquier proteína de origen animal esta bien) esté presente en todas tus comidas porque es el único macronutriente que promueve la ganancia y retención de músculo.',
+    'UIA21yCLzWs');
+
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (4,1,
+    'Como hombre gozas de un balance hormonal que promueve la ganancia de fuerza y musculatura (respecto a las mujeres). Entrena duro e inteligente, come sano descansa y mejorarás. Particularmente los hombres tendemos a compararnos con otros hombres en el gimnasio, prestando atención a la progresión que tienen respecto a la nuestra. Esta práctica, fuera de la motivación que pueda generar, no tienen ningún sentido. Lo importante es que TU progreses (repeticiones, peso) y nunca debes anteponer el ego a la técnica.',
+    '5RSYKGbjeE8');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (4,2,
+    'Como mujer tal vez has escuchado una serie de mitos. Por ejemplo, que una vez que tocas una pesa te vuelves un monstruo (cuerpo parecido al de un hombre, pectorales cuadrados, grandes trapecios). Debes entender que, por tu nivel elevado de estrógenos en tu cuerpo, la ganancia de músculo y fuerza te va a ser más difícil que si fueras un hombre. Jamás tengas miedo de entrenar duro y pesado, trata de mejorar en cada sesión de entrenamiento ya sea aumentando una repetición o una libra en la barra respecto a la sesión anterior. Si aún no te convencí y tienes miedo de adquirir ese cuerpo masculino, simplemente no entrenes (o dales un volumen mínimo) a esas partes del cuerpo que no quieres desarrollar, y veras que no existe ningún cambio en tu fisonomía. Te recomiendo que particularmente entrenes la espalda baja y los erectores de la columna, en especial si tienes un busto predominante, porque desarrollar fuerza y musculatura mejorará indudablemente tu postura, permitiéndote ver más erguida y esbelta.',
+    '9d39nLlgIh4');
+
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (5,1,
+    'Eres un adolescente. Estas en una etapa en la que mutas, te recomiendo que empieces entrenando con tu peso corporal (calistenia), y particularmente si entrenas alguna clase de deporte como fútbol, básquet, atletismo que entrenes para fuerza. (repeticiones bajas en ejercicios como sentadilla, peso muerto, press de banca) que tendrán una transferencia enorme a la cancha y te permitirán ser más explosivo y rápido.',
+    'IppF3VG4zlE');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (5,2,
+    'Estas en la época perfecta para la musculación. Si particularmente no practicas ningún deporte te recomiendo que le pongas una super énfasis a la hipertrofia (y no tanto a la fuerza), porque mejorará tu estética de manera increíble. Es genial porque tus niveles de testosterona en tu cuerpo son muy elevados, además de que podrás desarrollar madurez muscular.',
+    'D9lpL9lGry4');
+INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
+	VALUES (5,2,
+    'Particularmente esta edad es un poco difícil. Empiezas a ver degradación muscular debido a que tus niveles de testosterona bajan. Que eso no te importe, el llevar una vida activa (y particularmente el entrenamiento muscular) mejorará las condiciones en las que llegues a la vejez. Enfócate mucho pero mucho en la movilidad y la flexibilidad, además de ponerle especial atención a la auto regulación, escucha a tu cuerpo y haz los ajustes necesarios a tu entrenamiento para que puedas entrenar muchísimos años más.',
+    'I2vjG14kzzQ');
+
+CREATE TABLE public.trainee_recommendation
+(
+    trainee_recommendation_id SERIAL,
+    trainee_id INTEGER,
+    recommendation_id INTEGER,
+    PRIMARY KEY (trainee_recommendation_id)
+);
+
+
+ALTER TABLE public.trainee_recommendation
+    ADD FOREIGN KEY (trainee_id)
+    REFERENCES public.trainee (trainee_id)
+    NOT VALID;
+ALTER TABLE public.trainee_recommendation
+    ADD FOREIGN KEY (recommendation_id)
+    REFERENCES public.recommendation (recommendation_id)
+    NOT VALID;
 
 
 
