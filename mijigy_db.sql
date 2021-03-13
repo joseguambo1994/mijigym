@@ -153,7 +153,7 @@ INSERT INTO recommendation (recommendation_type, recommendation_number, recommen
     'Estas en la época perfecta para la musculación. Si particularmente no practicas ningún deporte te recomiendo que le pongas una super énfasis a la hipertrofia (y no tanto a la fuerza), porque mejorará tu estética de manera increíble. Es genial porque tus niveles de testosterona en tu cuerpo son muy elevados, además de que podrás desarrollar madurez muscular.',
     'D9lpL9lGry4');
 INSERT INTO recommendation (recommendation_type, recommendation_number, recommendation_text, recommendation_video  )
-	VALUES (5,2,
+	VALUES (5,3,
     'Particularmente esta edad es un poco difícil. Empiezas a ver degradación muscular debido a que tus niveles de testosterona bajan. Que eso no te importe, el llevar una vida activa (y particularmente el entrenamiento muscular) mejorará las condiciones en las que llegues a la vejez. Enfócate mucho pero mucho en la movilidad y la flexibilidad, además de ponerle especial atención a la auto regulación, escucha a tu cuerpo y haz los ajustes necesarios a tu entrenamiento para que puedas entrenar muchísimos años más.',
     'I2vjG14kzzQ');
 
@@ -174,6 +174,126 @@ ALTER TABLE public.trainee_recommendation
     ADD FOREIGN KEY (recommendation_id)
     REFERENCES public.recommendation (recommendation_id)
     NOT VALID;
+
+
+------------------- Store procedure for translating trainee_data to ids
+
+
+CREATE OR REPLACE FUNCTION create_trainee_recommendation()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+    DECLARE current_trainee_id integer;
+    DECLARE frequency_recommendation integer;
+    DECLARE level_recommendation integer;
+    DECLARE objective_recommendation integer;
+    DECLARE gender_recommendation integer;
+    DECLARE age_recommendation integer;
+    DECLARE frequency integer;
+    DECLARE level integer;
+    DECLARE objective integer;
+    DECLARE gender text;
+    DECLARE gender_id integer;
+    DECLARE age integer;
+    DECLARE age_id integer;
+    
+    BEGIN
+    
+    SELECT trainee_id
+    INTO current_trainee_id
+    FROM trainee
+    ORDER BY trainee_id DESC
+    LIMIT 1;
+
+    SELECT trainee_frequency_id
+    INTO frequency
+    FROM trainee
+    WHERE trainee_id = current_trainee_id;
+
+    SELECT trainee_level_id
+    INTO level
+    FROM trainee
+    WHERE trainee_id = current_trainee_id;
+    
+    SELECT trainee_objective_id
+    INTO objective
+    FROM trainee
+    WHERE trainee_id = current_trainee_id;
+
+    SELECT trainee_gender
+    INTO gender
+    FROM trainee
+    WHERE trainee_id = current_trainee_id;
+
+    SELECT trainee_age
+    INTO age
+    FROM trainee
+    WHERE trainee_id = current_trainee_id;
+
+    SELECT recommendation_id
+    into frequency_recommendation
+    FROM recommendation
+    WHERE recommendation_type = 1 AND recommendation_number = frequency;
+
+    INSERT INTO trainee_recommendation (trainee_id, recommendation_id)
+	VALUES (current_trainee_id,frequency_recommendation);
+
+    SELECT recommendation_id
+    into level_recommendation
+    FROM recommendation
+    WHERE recommendation_type = 2 AND recommendation_number = level;
+
+    INSERT INTO trainee_recommendation (trainee_id, recommendation_id)
+	VALUES (current_trainee_id,level_recommendation);
+
+    SELECT recommendation_id
+    into objective_recommendation
+    FROM recommendation
+    WHERE recommendation_type = 3 AND recommendation_number = objective;
+
+    INSERT INTO trainee_recommendation (trainee_id, recommendation_id)
+	VALUES (current_trainee_id,objective_recommendation);
+
+    IF gender = 'hombre' THEN
+    gender_id := 1;
+        ELSE
+    gender_id := 2;
+        END IF;
+    
+    SELECT recommendation_id
+    into gender_recommendation
+    FROM recommendation
+    WHERE recommendation_type = 4 AND recommendation_number = gender_id;
+
+    INSERT INTO trainee_recommendation (trainee_id, recommendation_id)
+	VALUES (current_trainee_id,gender_recommendation);
+
+     IF age < 18 THEN
+        age_id := 1;
+        
+        ELSEIF age BETWEEN 19 AND 39 THEN
+        age_id := 2;
+        ELSE
+        age_id :=3;
+        END IF;
+
+    SELECT recommendation_id
+    into age_recommendation
+    FROM recommendation
+    WHERE recommendation_type = 5 AND recommendation_number = age_id;
+
+    INSERT INTO trainee_recommendation (trainee_id, recommendation_id)
+	VALUES (current_trainee_id, age_recommendation);
+    
+    RETURN NULL;
+    END;
+    $$;
+
+------------------Trigger creation
+CREATE TRIGGER trigger_user_create
+    AFTER INSERT ON trainee
+    FOR EACH ROW
+    EXECUTE PROCEDURE create_trainee_recommendation()
 
 
 

@@ -24,6 +24,8 @@ app.set('view engine','ejs');
 var query_result_level = {};
 var query_result_frequency = {};
 var query_result_objective = {};
+var query_result_trainee_recommendation = {};
+
 
 var query_trainee_level = 'select * from trainee_level;';
 var query_trainee_objective = 'select * from trainee_objective;';
@@ -31,6 +33,7 @@ var query_trainee_frequency = 'select * from trainee_frequency;';
 var query_trainee_frequency_id = "select trainee_frequency_id  from trainee_frequency where trainee_frequency_type = ";
 var query_trainee_level_id = "select trainee_level_id  from trainee_level where trainee_level_type = ";
 var query_trainee_objective_id = "select trainee_objective_id  from trainee_objective where trainee_objective_type = ";
+var query_trainee_recommendation = "select * from view_trainee_recommendation";
 
 pool.query(query_trainee_level,(err,res)=>{
     if (err) {
@@ -162,6 +165,17 @@ var getObjectiveId = (objective_text) =>{
 	VALUES ("+"'"+name+"'"+","+age+","+"'"+gender+"'"+","+"'"+email+"'"+","+frequency_id+","+level_id+","+objective_id+");";
   console.log(query_insert_user);
   pool.query(query_insert_user);
+
+  pool.query(query_trainee_recommendation,(err,res)=>{
+    if (err) {
+        console.log(err.stack)
+      } else{
+        query_result_trainee_recommendation = res.rows;
+        console.log(query_result_trainee_recommendation);
+      }
+});
+
+
 })
  
 
