@@ -145,21 +145,16 @@ var getObjectiveId = (objective_text) =>{
 
 
   app.post("/user2",(req,res)=>{
-  res.json(req.body)
+  //res.json(req.body)
   console.log(req.body)
   var name = req.body.trainee_name;
   var age = req.body.trainee_age;
   var gender = req.body.trainee_gender;
   var email = req.body.trainee_email;
   var frequency_id = req.body.trainee_frequency_id;
- // var frequency_id = getFrequencyId(req.body.trainee_frequency_id.toString());
-
   var level_id = req.body.trainee_level_id;
   var objective_id = req.body.trainee_objective_id;
-  
-  // var level_id = getLevelId(req.body.trainee_level_id.toString());
-  // var objective_id = getObjectiveId(req.body.trainee_objective_id.toString());
-  
+
   var query_insert_user = "INSERT INTO trainee (trainee_name,trainee_age,trainee_gender,\
     trainee_email,trainee_frequency_id,trainee_level_id,trainee_objective_id )\
 	VALUES ("+"'"+name+"'"+","+age+","+"'"+gender+"'"+","+"'"+email+"'"+","+frequency_id+","+level_id+","+objective_id+");";
@@ -173,7 +168,9 @@ var getObjectiveId = (objective_text) =>{
         query_result_trainee_recommendation = res.rows;
         console.log(query_result_trainee_recommendation);
       }
+  
 });
+res.json(query_result_trainee_recommendation);
 
 
 })
