@@ -146,6 +146,7 @@ var getObjectiveId = (objective_text) =>{
 
   app.post("/user2",(req,res)=>{
   //res.json(req.body)
+  console.log("Body data sent from front-end")
   console.log(req.body)
   var name = req.body.trainee_name;
   var age = req.body.trainee_age;
@@ -166,6 +167,7 @@ var getObjectiveId = (objective_text) =>{
         console.log(err.stack)
       } else{
         query_result_trainee_recommendation = res.rows;
+        console.log("QUERY Desde postgres hacia node js")
         console.log(query_result_trainee_recommendation);
       }
   
