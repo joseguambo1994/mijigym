@@ -144,7 +144,7 @@ var getObjectiveId = (objective_text) =>{
 }
 
 
-  app.post("/user2",(req,res)=>{
+  app.post("/user2",(req,response)=>{
   //res.json(req.body)
   console.log("Body data sent from front-end")
   console.log(req.body)
@@ -160,20 +160,24 @@ var getObjectiveId = (objective_text) =>{
     trainee_email,trainee_frequency_id,trainee_level_id,trainee_objective_id )\
 	VALUES ("+"'"+name+"'"+","+age+","+"'"+gender+"'"+","+"'"+email+"'"+","+frequency_id+","+level_id+","+objective_id+");";
   console.log(query_insert_user);
-  pool.query(query_insert_user);
+ // pool.query(query_insert_user);
 
-  pool.query(query_trainee_recommendation,(err,res)=>{
+  pool.query(query_insert_user,(err,res)=>{
     if (err) {
         console.log(err.stack)
       } else{
-        query_result_trainee_recommendation = res.rows;
-        console.log("QUERY Desde postgres hacia node js")
-        console.log(query_result_trainee_recommendation);
+        pool.query(query_trainee_recommendation,(err,res)=>{
+          if (err) {
+              console.log(err.stack)
+            } else{
+              query_result_trainee_recommendation = res.rows;
+              console.log("QUERY Desde postgres hacia node js")
+              console.log(query_result_trainee_recommendation);
+              response.json(query_result_trainee_recommendation);
+            }
+        });
       }
-  
-});
-res.json(query_result_trainee_recommendation);
-
+  });
 
 })
  
